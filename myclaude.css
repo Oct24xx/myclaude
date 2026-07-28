@@ -115,8 +115,13 @@ body {
     --code-font-color: #8a2424;
     --code-border: #1f1e1d26;
 
-    --quote-font-color: #3d3d3a;
-    --quote-boder: #1f1e1d1a;
+    --quote-bg-color: #f3ede5;
+    --quote-font-color: #625950;
+    --quote-boder: #d8cbbb;
+
+    --task-accent-color: #bc6a3a;
+    --link-color: #9d552d;
+    --link-hover-color: #7f4024;
 
     --LOGO-color: #D97757;
 
@@ -196,6 +201,7 @@ body {
 body {
     line-height: inherit;
     color: var(--font-color);
+    background-color: var(--bg-color);
     font-size: 1rem;
     font-weight: var(--font-weight);
 
@@ -496,41 +502,9 @@ markdown > ol ol {
 /* ---------- Theme Section ---------- */
 
 #write li.md-task-list-item > input[type="checkbox"] {
-    display: inline-block;
-    -webkit-appearance: none;
-    appearance: none;
-    box-sizing: border-box;
-    width: 13px !important;
-    height: 13px !important;
-    position: absolute;
-    top: 2.1px;
-    left: 2px;
     margin-left: -1.3em !important;
-    margin-top: calc(1em - 12px) !important;
-    border: 1px solid #d0cfce !important;
-    border-radius: 2px !important;
-    background-color: #f7f6f5 !important;
+    accent-color: var(--task-accent-color);
     cursor: pointer;
-}
-
-/* Implementation detail */
-#write li.md-task-list-item > input[type="checkbox"]:checked {
-    background-color: #d0d0cf !important;
-    border-color: #d0cfce !important;
-}
-
-/* Implementation detail */
-#write li.md-task-list-item > input[type="checkbox"]:checked::after {
-    content: "";
-    position: absolute;
-    box-sizing: border-box;
-    left: 3px;
-    top: 0px;
-    width: 5px;
-    height: 9px;
-    border: solid #ececec !important;
-    border-width: 0 2px 2px 0 !important;
-    transform: rotate(45deg);
 }
 
 /* ---------- Theme Section ---------- */
@@ -979,18 +953,22 @@ tt {
 /* ---------- Theme Section ---------- */
 
 blockquote {
-    background-color: transparent;
-    margin: 0 0 0 0.5rem;
-    padding: 0 2rem 0 0.5rem;
-    border-left-width: 4px;
+    background-color: var(--quote-bg-color);
+    margin: 0.78em 0;
+    padding: 0.55rem 1rem;
+    border-left: 2px solid var(--quote-boder);
+    border-radius: 10px;
     color: var(--quote-font-color);
-    border-color: var(--quote-boder);
 }
 
 /* Implementation detail */
-blockquote > p {
-    padding: 0 2rem 0 0.5rem;
+#write blockquote > p {
+    padding: 0;
     margin: 0;
+}
+
+blockquote blockquote {
+    padding-right: 0;
 }
 
 /* Implementation detail */
@@ -1258,8 +1236,8 @@ a {
 }
 
 #write a {
-    color: #0969da;
-    text-decoration-color: #0969da;
+    color: var(--link-color);
+    text-decoration-color: var(--link-color);
 }
 
 a:hover {
@@ -1268,8 +1246,8 @@ a:hover {
 }
 
 #write a:hover {
-    color: #0550ae;
-    text-decoration-color: #0550ae;
+    color: var(--link-hover-color);
+    text-decoration-color: var(--link-hover-color);
 }
 
 /* =========================================
