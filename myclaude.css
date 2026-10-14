@@ -66,7 +66,7 @@ html {
 
 html,
 :host {
-    line-height: 1.5;
+    line-height: 1.6;
     tab-size: 4;
 }
 
@@ -151,6 +151,12 @@ body {
     --pre-inputfont-weight: 430;
     --sidebar-font-weight: 430;
 
+    /* GitHub-like vertical rhythm, shared by screen and export styles. */
+    --block-space: 0.8rem;
+    --heading-space: 0.9rem;
+    --list-item-space: 0.25rem;
+    --outline-label-padding: 3px;
+
     /* Implementation detail */
     --raduis-8: 8px;
     --raduis-12: 12px;
@@ -216,9 +222,8 @@ body {
     width: 100%;
     max-width: 900px;
     padding: 2.25rem 1rem 4.375rem 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+    /* Normal block flow lets adjacent margins collapse instead of adding up. */
+    display: block;
     caret-color: #D97757;
 }
 
@@ -359,52 +364,51 @@ body {
 
 /* ---------- Theme Section ---------- */
 
+#write h1,
+#write h2,
+#write h3,
+#write h4,
+#write h5,
+#write h6 {
+    line-height: 1.4;
+    font-weight: var(--font-strong);
+    margin: var(--heading-space) 0;
+    padding: 0 2rem 0 0.5rem;
+}
+
 #write h1 {
     font-size: 1.875rem;
-    line-height: 1.5rem;
-    font-weight: var(--font-strong);
-    margin: 0.75rem 0 -0.25rem 0;
-    padding: 0 2rem 0 0.5rem;
 }
 
 #write h2 {
     font-size: 1.5rem;
-    line-height: 1.5rem;
-    font-weight: var(--font-strong);
-    margin: 0.75rem 0 -0.25rem 0;
-    padding: 0 2rem 0 0.5rem;
 }
 
 #write h3 {
     font-size: 1.35rem;
-    line-height: 1.35rem;
-    font-weight: var(--font-strong);
-    margin: 0.5rem 0 -0.25rem 0;
-    padding: 0 2rem 0 0.5rem;
 }
 
 #write h4 {
     font-size: 1.125rem;
-    line-height: 1.35rem;
-    font-weight: var(--font-strong);
-    margin: 0.5rem 0 -0.25rem 0;
-    padding: 0 2rem 0 0.5rem;
 }
 
 #write h5,
 #write h6 {
     font-size: 1rem;
-    line-height: 1.25rem;
     font-weight: 600;
-    margin: 0.5rem 0 -0.25rem 0;
-    padding: 0 2rem 0 0.5rem;
 }
 
 /* ---------- Theme Section ---------- */
 
 #write p {
     padding: 0 2rem 0 0.5rem;
-    margin: 0;
+    margin: var(--block-space) 0;
+}
+
+#write dl,
+#write .md-math-block,
+#write .md-rawblock {
+    margin: var(--block-space) 0;
 }
 
 #write strong {
@@ -465,33 +469,53 @@ span[md-inline="underline"] u {
 
 /* ---------- Theme Section ---------- */
 
+#write ul,
+#write ol,
 .write ul,
 .write ol {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    line-height: 1.65rem;
+    display: block;
+    line-height: inherit;
+    margin: var(--block-space) 0;
+    padding: 0 0 0 2rem;
 }
 
+#write li,
 .write li {
     padding: 0 0 0 0.5rem;
     margin: 0;
 }
 
-#write li > p {
-    padding: 0;
+#write li + li,
+.write li + li {
+    margin-top: var(--list-item-space);
 }
 
+#write li > p {
+    padding: 0;
+    margin: 0.4rem 0;
+}
+
+#write li > p:first-child {
+    margin-top: 0;
+}
+
+#write li > p:last-child {
+    margin-bottom: 0;
+}
+
+#write > ul,
+#write > ol,
 .write > ul,
 .write > ol {
     padding: 0 2rem;
-    margin: 0 0 0.75rem 0;
 }
 
-.write > ul ul,
-markdown > ol ol {
-    padding: 0 2rem 0.25rem 2rem;
-    margin: 0.25rem 0 0 0;
+#write li > ul,
+#write li > ol,
+.write li > ul,
+.write li > ol {
+    margin: var(--list-item-space) 0 0;
+    padding: 0 0 0 2rem;
 }
 
 /* Implementation detail */
@@ -499,10 +523,22 @@ markdown > ol ol {
     list-style-type: disc;
 }
 
+#write li > ul:not(.task-list) {
+    list-style-type: circle;
+}
+
+#write li li > ul:not(.task-list) {
+    list-style-type: square;
+}
+
 /* ---------- Theme Section ---------- */
 
 #write li.md-task-list-item > input[type="checkbox"] {
+    width: 0.9em;
+    height: 0.9em;
     margin-left: -1.3em !important;
+    /* Center the slightly larger checkbox within the 1.6em text line. */
+    margin-top: 0.35em;
     accent-color: var(--task-accent-color);
     cursor: pointer;
 }
@@ -515,7 +551,7 @@ markdown > ol ol {
     background-color: transparent;
     border-radius: 0;
     box-shadow: none;
-    margin: 0.8em 0;
+    margin: var(--block-space) 0;
     padding: 0;
 }
 
@@ -528,6 +564,13 @@ markdown > ol ol {
     line-height: 1.6;
     padding: 0;
     word-break: initial;
+    margin: var(--block-space) 0;
+}
+
+/* The figure owns the outer spacing in Typora; do not count it twice. */
+#write .md-table-fig.table-figure > table,
+.write .md-table-fig.table-figure > table {
+    margin: 0;
 }
 
 #write table tr,
@@ -673,14 +716,6 @@ markdown > ol ol {
 }
 
 /* Implementation detail */
-.md-table-fig.table-figure + h1,
-.md-table-fig.table-figure + h2,
-.md-table-fig.table-figure + h3,
-.md-table-fig.table-figure + h4 {
-    margin-top: 0 !important;
-}
-
-/* Implementation detail */
 .typora-table-drag-area {
     display: none;
 }
@@ -693,17 +728,20 @@ markdown > ol ol {
 hr {
     border: none;
     border-top-style: solid;
-    margin: .75rem .375rem;
+    margin: var(--block-space) .375rem;
     border-top-width: 1px;
     border-color: var(--hr-color);
 }
 
-/* Implementation detail */
-.md-hr.md-end-block + h1,
-.md-hr.md-end-block + h2,
-.md-hr.md-end-block + h3,
-.md-hr.md-end-block + h4 {
-    margin-top: 0 !important;
+/* Typora wraps horizontal rules; the wrapper owns the block spacing. */
+#write > .md-hr {
+    margin: var(--block-space) 0;
+    padding: 0;
+}
+
+#write > .md-hr hr {
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 /* ---------- Theme Section ---------- */
@@ -717,8 +755,9 @@ hr {
 
 /* Implementation detail */
 .md-fences {
-    margin: 0 !important;
-    padding: 2.8rem 0.875rem 0.875rem 0.875rem;
+    margin: var(--block-space) 0 !important;
+    padding: 0.875rem;
+    font-size: 15px;
     background-color: var(--pre-bg-color);
     border-style: solid;
     border-width: 0.5px;
@@ -762,8 +801,13 @@ hr {
 }
 
 /* Implementation detail */
+.md-fences .CodeMirror,
+.md-fences code {
+    font-size: 15px;
+}
+
 .CodeMirror-lines {
-    font-size: 0.875rem;
+    font-size: 15px;
     font-weight: var(--font-weight);
     line-height: 1.625;
     font-family: var(--font-mono);
@@ -773,118 +817,43 @@ hr {
     padding: 0 !important;
 }
 
-/* Implementation detail */
-.ty-input.ty-input-after.ty-cm-lang-input {
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    text-align: left !important;
-    color: var(--pre-inputfont-color) !important;
-    font-weight: var(--pre-inputfont-weight) !important;
-    font-size: 0.75rem !important;
-    font-family: var(--font-sans);
-}
-
-/* Implementation detail */
-.md-fences .code-tooltip.md-tooltip-remove {
-    font-size: 0.75rem !important;
-    font-family: var(--font-sans);
-    border: none !important;
-    box-shadow: none !important;
-    margin: 0 !important;
-    padding: 14px 0 0 15px !important;
-    line-height: 17px;
-    height: auto;
-    top: 0px !important;
-    bottom: auto !important;
-    left: 0px !important;
-}
-
-/* Implementation detail */
-
-/* Implementation detail */
-.md-fences[lang]:not([lang=""])::before {
-    content: attr(lang);
-    position: absolute;
-    display: block;
-    top: 0px !important;
-    left: 0px !important;
-    padding: 14px 0 0 15px !important;
-    line-height: 17px !important;
-    color: var(--pre-inputfont-color) !important;
-    font-weight: var(--pre-inputfont-weight) !important;
-    font-size: 0.75rem !important;
-    font-family: var(--font-sans) !important;
-    z-index: 11;
-    pointer-events: none;
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Implementation detail */
-.md-fences.md-focus[lang]::before {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Implementation detail */
-.md-fences.md-focus:has(.code-tooltip:focus-within)[lang]::before {
-    opacity: 0 !important;
-    visibility: hidden !important;
-}
-
-/* Implementation detail */
+/* Use Typora's GitHub-style language editor: below the bottom-right corner,
+   outside document flow, and visible only while the code block is active. */
 .md-fences .code-tooltip {
     position: absolute !important;
-    top: 0px !important;
-    left: 0px !important;
-    bottom: auto !important;
-    right: auto !important;
-    padding: 14px 0 0 15px !important;
+    top: auto !important;
+    left: auto !important;
+    bottom: -30px;
+    right: 0;
+    padding: 0 20px;
     margin: 0 !important;
     height: auto !important;
-    border: none !important;
-    box-shadow: none !important;
-    background: transparent !important;
+    font-size: 15px;
+    font-family: var(--font-mono);
+    background-color: var(--pre-bg-color);
+    border-top: 1px solid var(--pre-border-color);
     transition: none !important;
     animation: none !important;
-    z-index: 10;
-    opacity: 0 !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
+    z-index: 20;
 }
 
-/* Implementation detail */
 .md-fences.md-focus .code-tooltip {
+    opacity: 1 !important;
     visibility: visible !important;
     pointer-events: auto !important;
 }
 
-/* Implementation detail */
-.md-fences.md-focus .code-tooltip:focus-within {
-    opacity: 1 !important;
-    visibility: visible !important;
-}
-
-/* Implementation detail */
 .md-fences:not(.md-focus) .code-tooltip {
-    opacity: 0 !important;
-    visibility: hidden !important;
     display: none !important;
 }
 
-/* Implementation detail */
 .md-fences .code-tooltip .ty-input {
-    color: var(--pre-inputfont-color) !important;
+    color: #000000 !important;
     font-weight: var(--pre-inputfont-weight) !important;
-    font-size: 0.75rem !important;
-    font-family: var(--font-sans) !important;
-    line-height: 17px !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    border: none !important;
+    font-size: 15px !important;
+    font-family: var(--font-mono) !important;
     background: transparent !important;
-    text-align: left !important;
+    text-align: center;
 }
 
 /* Implementation detail */
@@ -954,7 +923,7 @@ tt {
 
 blockquote {
     background-color: var(--quote-bg-color);
-    margin: 0.78em 0;
+    margin: var(--block-space) 0;
     padding: 0.55rem 1rem;
     border-left: 2px solid var(--quote-boder);
     border-radius: 10px;
@@ -964,18 +933,32 @@ blockquote {
 /* Implementation detail */
 #write blockquote > p {
     padding: 0;
-    margin: 0;
+    margin: 0.5rem 0;
 }
 
 blockquote blockquote {
-    padding-right: 0;
+    margin: 0.5rem 0;
 }
 
 /* Implementation detail */
-blockquote ol,
-blockquote ul {
-    padding: 0 32px;
-    margin: 0 0 12px 0;
+#write blockquote > ol,
+#write blockquote > ul {
+    padding: 0 0 0 2rem;
+    margin: 0.5rem 0;
+}
+
+#write blockquote > :first-child {
+    margin-top: 0;
+}
+
+#write blockquote > :last-child {
+    margin-bottom: 0;
+}
+
+#write .md-toc {
+    margin: var(--block-space) 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* ---------- Theme Section ---------- */
@@ -989,7 +972,7 @@ blockquote ul {
     --alert-shadow: rgb(31 30 29 / 12%);
 
     position: relative;
-    margin: 0.25rem 2rem 0.75rem 0.5rem;
+    margin: var(--block-space) 2rem var(--block-space) 0.5rem;
     padding: 0.72rem 0.9rem 0.78rem 1rem;
     color: var(--font-color);
     background:
@@ -1079,7 +1062,10 @@ blockquote ul {
 #write .md-alert ol {
     padding: 0 0 0 1.25rem;
     margin: 0.35rem 0 0 0;
-    gap: 0.12rem;
+}
+
+#write .md-alert li + li {
+    margin-top: var(--list-item-space);
 }
 
 #write .md-alert code {
@@ -1977,6 +1963,10 @@ a:hover {
 .outline-content li {
     position: relative;
     z-index: 30;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* Implementation detail */
@@ -1990,6 +1980,9 @@ a:hover {
     z-index: 48;
     margin-left: 18px;
     margin-top: 0 !important;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 /* Implementation detail */
@@ -2002,7 +1995,7 @@ a:hover {
 .outline-content li .outline-item {
     position: relative;
     z-index: 50;
-    margin: 0 0 3px 7px;
+    margin: 0 0 2px 7px;
     width: calc(100% - 4px);
     min-width: 0;
     height: auto;
@@ -2023,7 +2016,7 @@ a:hover {
 }
 
 .outline-item > .outline-expander:before {
-    margin-top: 10px;
+    margin-top: calc(var(--outline-label-padding) + 4px);
     margin-left: -2px;
     background: transparent;
     padding: 0 4px 0 2px;
@@ -2038,9 +2031,9 @@ a:hover {
     min-width: 0;
     box-sizing: border-box;
     border-radius: 4px;
-    padding: 7px 7px 7px 8px;
+    padding: var(--outline-label-padding) 7px var(--outline-label-padding) 8px;
     font-size: 14px !important;
-    line-height: 1.35;
+    line-height: 1.4;
     overflow-wrap: anywhere;
     word-wrap: break-word;
     word-break: normal;
@@ -2080,22 +2073,22 @@ a:hover {
     position: absolute;
     z-index: 38;
     left: -10px;
-    top: -27.5px;
+    top: -19.5px;
     width: 10px;
-    height: calc(50% + 28px);
+    height: calc(50% + 20px);
     background: transparent;
     border-left: 1px solid var(--LOGO-color);
     border-bottom: 1px solid var(--LOGO-color);
 }
 
 .os-windows .outline-content li .outline-item::before {
-    top: -28.5px;
+    top: -20.5px;
 }
 
 /* Implementation detail */
 .outline-content > li:first-of-type > .outline-item::before {
     top: calc(50% - 1px);
-    height: calc(50% + 15px);
+    height: calc(50% + 11px);
     border-left: 1px solid var(--LOGO-color);
     border-top: 1px solid var(--LOGO-color);
     border-bottom: none;
@@ -2106,20 +2099,20 @@ a:hover {
 /* Implementation detail */
 .outline-children > li:first-child > .outline-item::before,
 .outline-content > li:nth-child(2) > .outline-item::before {
-    top: -11px;
-    height: calc(50% + 12px);
+    top: -7px;
+    height: calc(50% + 8px);
 }
 
 .os-windows .outline-children > li:first-child > .outline-item::before,
 .os-windows .outline-content > li:nth-child(2) > .outline-item::before {
-    top: -13px;
-    height: calc(50% + 13px);
+    top: -9px;
+    height: calc(50% + 9px);
 }
 
 .no-collapse-outline .outline-children > li:first-child > .outline-item::before,
 .no-collapse-outline .outline-content > li:nth-child(2) > .outline-item::before {
-    top: -8px;
-    height: calc(50% + 8px);
+    top: -4px;
+    height: calc(50% + 4px);
 }
 
 /* Implementation detail */
@@ -2134,9 +2127,9 @@ a:hover {
     content: '';
     position: absolute;
     left: -21px;
-    top: -26px;
+    top: -18px;
     width: 1px;
-    height: calc(100% + 12px);
+    height: calc(100% + 8px);
     background: transparent;
     border-left: 1px solid var(--LOGO-color);
 }
@@ -2148,7 +2141,7 @@ a:hover {
 /* Implementation detail */
 .no-collapse-outline .outline-content > li.outline-item-wrapper:first-child > .outline-children::before,
 .outline-content > li.outline-item-open:first-child > .outline-children::before {
-    top: -15px;
+    top: -11px;
 }
 
 /* Implementation detail */
@@ -2232,7 +2225,7 @@ li > .outline-item:hover::before,
 
 /* Implementation detail */
 .outline-content li:has(.ty-outline-hit) .outline-item > .outline-label {
-    padding: 8px 10px !important;
+    padding: var(--outline-label-padding) 10px !important;
 }
 
 /* =========================================
@@ -2393,42 +2386,7 @@ li > .outline-item:hover::before,
    ========================================= */
 
 @media print {
-    /* ---------- Theme Section ---------- */
-    #write ul,
-    #write ol,
-    .write ul,
-    .write ol {
-        display: block;
-        gap: normal;
-    }
-
-    #write li,
-    .write li {
-        margin-bottom: 0.25rem;
-    }
-
-    #write li > p,
-    .write li > p {
-        padding: 0;
-        margin: 0;
-    }
-
-    #write > ul,
-    #write > ol,
-    .write > ul,
-    .write > ol {
-        padding: 0 2rem;
-        margin: 0 0 0.75rem 0;
-    }
-
-    #write > ul ul,
-    #write > ol ol,
-    .write > ul ul,
-    .write > ol ol {
-        padding: 0 2rem 0.25rem 2rem;
-        margin: 0.25rem 0 0 0;
-    }
-
+    /* Lists use the same spacing as the editor, including mixed nesting. */
     /* ---------- Print / PDF Export Fixes ---------- */
     #write table,
     .write table {
